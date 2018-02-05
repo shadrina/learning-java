@@ -17,6 +17,7 @@ public class Converter {
             TreeMap<String, Integer> words_with_freq = new TreeMap<>();
             StringBuilder builder = new StringBuilder();
             int symb = reader.read();
+            int words_counter = 0;
             while (true) {
                 char ch = (char)symb;
                 if (Character.isLetterOrDigit(ch)) builder.append(ch);
@@ -29,12 +30,12 @@ public class Converter {
                     }
                     else words_with_freq.put(word, 1);
                     builder.delete(0, builder.length());
+                    words_counter++;
                 }
                 if (symb == -1) break;
                 symb = reader.read();
             }
-            System.out.println(entriesSortedByValues(words_with_freq));
-            CsvWriter.write(entriesSortedByValues(words_with_freq), 6);
+            CsvWriter.write(entriesSortedByValues(words_with_freq), words_counter);
 
         }
         catch (IOException e) {
