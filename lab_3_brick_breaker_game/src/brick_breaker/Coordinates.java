@@ -1,19 +1,12 @@
 package brick_breaker;
 
-/**
- * Simple class for storing coordinates
- */
-public class Coordinates {
+public class Coordinates implements Cloneable {
     private int x;
     private int y;
 
     public Coordinates(int x_, int y_) {
         this.x = x_;
         this.y = y_;
-    }
-
-    public static Coordinates newInstance(Coordinates coordinates) {
-        return new Coordinates(coordinates.getX(), coordinates.getY());
     }
 
     public int getX() {
@@ -36,4 +29,17 @@ public class Coordinates {
         this.x = x_;
         this.y = y_;
     }
+
+    @Override
+    public Coordinates clone() {
+        Coordinates clone;
+        try {
+            clone = (Coordinates) super.clone();
+            return clone;
+        } catch(CloneNotSupportedException exception) {
+            System.err.println("Cloning not allowed.");
+            return this;
+        }
+    }
+
 }

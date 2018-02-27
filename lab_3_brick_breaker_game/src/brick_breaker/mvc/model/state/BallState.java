@@ -3,24 +3,11 @@ package brick_breaker.mvc.model.state;
 import brick_breaker.Coordinates;
 import brick_breaker.mvc.model.ModelCommons;
 
-// TODO JavaDoc
+public class BallState implements Cloneable, ModelCommons {
 
-public class BallState implements ModelCommons {
     private Coordinates ball = new Coordinates(INIT_BALL_X, INIT_BALL_Y);
     private int ball_x_direction = INIT_BALL_DIR_X;
     private int ball_y_direction = INIT_BALL_DIR_Y;
-
-    public static BallState newInstance(BallState ballState) {
-        return new BallState(Coordinates.newInstance(ballState.ball), ballState.ball_x_direction, ballState.ball_y_direction);
-    }
-
-    public BallState() { }
-
-    BallState(Coordinates ball_, int ball_x_direction_, int ball_y_direction_) {
-        ball = ball_;
-        ball_x_direction = ball_x_direction_;
-        ball_y_direction = ball_y_direction_;
-    }
 
     public void moveBall() {
        ball.setX(ball.getX() + ball_x_direction);
@@ -60,6 +47,20 @@ public class BallState implements ModelCommons {
 
     public int getY() {
         return ball.getY();
+    }
+
+    @Override
+    public BallState clone() {
+        BallState clone;
+        try {
+            clone = (BallState) super.clone();
+            clone.ball = this.ball.clone();
+            return clone;
+
+        } catch(CloneNotSupportedException exception) {
+            System.err.println("Cloning not allowed.");
+            return this;
+        }
     }
 
 }

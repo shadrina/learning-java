@@ -25,25 +25,25 @@ import java.awt.image.BufferedImage;
 public class MainPanel extends JPanel implements IModelSubscriber, ActionListener, KeyListener, ViewCommons {
 
     private BrickBreakerModel model;
-    private BrickBreakerController controller;
+    private final BrickBreakerController controller;
 
-    private BufferedImage bg_img = null;
-    private BufferedImage heart_img = null;
-    private BufferedImage paddle_img = null;
-    private BufferedImage ball_img = null;
-    private BufferedImage cell_img = null;
-    private BufferedImage stone_cell_img = null;
+    private BufferedImage bgImg = null;
+    private BufferedImage heartImg = null;
+    private BufferedImage paddleImg = null;
+    private BufferedImage ballImg = null;
+    private BufferedImage cellImg = null;
+    private BufferedImage stoneCellImg = null;
 
     private Timer timer;
 
     MainPanel(BrickBreakerModel model_, BrickBreakerController controller_) {
         try {
-            bg_img = ImageIO.read(new File(RESOURCE_PATH + "dark.jpg"));
-            heart_img = ImageIO.read(new File(RESOURCE_PATH + "heart.png"));
-            paddle_img = ImageIO.read(new File(RESOURCE_PATH + "paddle.png"));
-            ball_img = ImageIO.read(new File(RESOURCE_PATH + "ball.png"));
-            cell_img = ImageIO.read(new File(RESOURCE_PATH + "cell.png"));
-            stone_cell_img = ImageIO.read(new File(RESOURCE_PATH + "stone-cell.png"));
+            bgImg = ImageIO.read(new File(RESOURCE_PATH + "dark.jpg"));
+            heartImg = ImageIO.read(new File(RESOURCE_PATH + "heart.png"));
+            paddleImg = ImageIO.read(new File(RESOURCE_PATH + "paddle.png"));
+            ballImg = ImageIO.read(new File(RESOURCE_PATH + "ball.png"));
+            cellImg = ImageIO.read(new File(RESOURCE_PATH + "cell.png"));
+            stoneCellImg = ImageIO.read(new File(RESOURCE_PATH + "stone-cell.png"));
         }
         catch (IOException exc) {
             //TODO: Handle exception.
@@ -67,37 +67,37 @@ public class MainPanel extends JPanel implements IModelSubscriber, ActionListene
         UserState userState = model.getUserState();
 
         // background
-        g.drawImage(bg_img, 0, 0, this);
+        g.drawImage(bgImg, 0, 0, this);
 
         // scores
         g.setColor(Color.white);
         g.setFont(new Font(FONT, Font.BOLD, SCORE_FONT_SIZE));
-        g.drawString("" + userState.getScore(), 625, 35);
+        g.drawString("" + userState.getScore(), SCORE_COORDINATES.getX(), SCORE_COORDINATES.getY());
 
         // lives
         for (int i = 0; i < userState.getLivesNumber(); i++)
-            g.drawImage(heart_img, i * HEART_WIDTH + 10, 10, this);
+            g.drawImage(heartImg, i * HEART_WIDTH + 10, 10, this);
 
         // drawing map
         for (int i = 0; i < cellsState.getRowsNumber(); i++)
             for (int j = 0; j < cellsState.getColumnNumber(); j++) {
                 if (cellsState.isUsual(i, j))
-                    g.drawImage(cell_img, j * CELL_WIDTH + LEFT_SHIFT, i * CELL_HEIGHT + TOP_SHIFT, this);
+                    g.drawImage(cellImg, j * CELL_WIDTH + LEFT_SHIFT, i * CELL_HEIGHT + TOP_SHIFT, this);
                 if (cellsState.isStone(i, j))
-                    g.drawImage(stone_cell_img, j * CELL_WIDTH + LEFT_SHIFT, i * CELL_HEIGHT + TOP_SHIFT, this);
+                    g.drawImage(stoneCellImg, j * CELL_WIDTH + LEFT_SHIFT, i * CELL_HEIGHT + TOP_SHIFT, this);
             }
 
         // the player
-        g.drawImage(paddle_img, playerState.getX(), playerState.getY(), this);
+        g.drawImage(paddleImg, playerState.getX(), playerState.getY(), this);
 
         // the ball
-        g.drawImage(ball_img, ballState.getX(), ballState.getY(), this);
+        g.drawImage(ballImg, ballState.getX(), ballState.getY(), this);
         if (ballState.getY() > BOTTOM_BORDER && userState.getLivesNumber() <= 1) {
             controller.stopGame();
             g.setColor(Color.white);
             g.setFont(new Font(FONT, Font.BOLD, GAME_OVER_FONT_SIZE));
-            g.drawString("Game over, score: " + userState.getScore(), 130, 260);
-            g.drawString("Press Enter to restart", 180, 290);
+            g.drawString("Game over, score: " + userState.getScore(), GAME_OVER_COORDINATES.getX(), GAME_OVER_COORDINATES.getY());
+            g.drawString("Press Enter to restart", PRESS_ENTER_TO_RESTART_COORDINATES.getX(), PRESS_ENTER_TO_RESTART_COORDINATES.getY());
         }
         else if (ballState.getY() > BOTTOM_BORDER) controller.startNewGameLife();
 
@@ -175,4 +175,5 @@ public class MainPanel extends JPanel implements IModelSubscriber, ActionListene
 
     @Override
     public void keyReleased(KeyEvent e) { }
+
 }

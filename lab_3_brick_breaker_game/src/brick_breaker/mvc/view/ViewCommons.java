@@ -1,5 +1,7 @@
 package brick_breaker.mvc.view;
 
+import brick_breaker.Coordinates;
+
 public interface ViewCommons {
 
     /**
@@ -47,7 +49,15 @@ public interface ViewCommons {
     public static final String FONT = "Courier New";
     public static final int SCORE_FONT_SIZE = 35;
     public static final int GAME_OVER_FONT_SIZE = 35;
-    public static final int SCORE_X = 625;
-    public static final int SCORE_Y = 35;
+
+    /**
+     * Coordinates of main elements
+     */
+    public static final Coordinates APP_WINDOW_COORDINATES = new Coordinates(10, 10);
+    public static final int APP_WINDOW_WIDTH = 710;
+    public static final int APP_WINDOW_HEIGTH = 620;
+    public static final Coordinates SCORE_COORDINATES = new Coordinates(625, 35);
+    public static final Coordinates GAME_OVER_COORDINATES = new Coordinates(130, 260);
+    public static final Coordinates PRESS_ENTER_TO_RESTART_COORDINATES = new Coordinates(180, 290);
 
 }

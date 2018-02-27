@@ -1,8 +1,5 @@
 package brick_breaker.mvc.model;
 
-/**
- * Keys
- */
 public interface ModelCommons {
 
     /**

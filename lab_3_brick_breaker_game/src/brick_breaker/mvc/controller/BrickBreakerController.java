@@ -20,26 +20,24 @@ public class BrickBreakerController implements ControllerCommons {
     private static BrickBreakerView view = new BrickBreakerView();
 
     public void start() {
-        view.createUI(model, this);
+        view.createUI(model.clone(), this);
     }
 
     public void restart() {
         UserState userState = model.getUserState();
         PlayerState playerState = model.getPlayerState();
         BallState ballState = model.getBallState();
-        CellsState cellsState = model.getCellsState();
 
         userState.startPlaying();
         playerState.moveToInitPosition();
         ballState.moveToInitPosition();
         userState.nullifyScore();
         userState.restoreGameLives();
-        cellsState = new CellsState(MAX_STONES_NUMBER);
 
         model.setState(userState);
         model.setState(playerState);
         model.setState(ballState);
-        model.setState(cellsState);
+        model.setState(new CellsState(MAX_STONES_NUMBER));
     }
 
     public void stopGame() {
