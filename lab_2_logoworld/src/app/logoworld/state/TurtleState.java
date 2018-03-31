@@ -1,4 +1,4 @@
-package app.logoworld;
+package app.logoworld.state;
 
 enum PenState { UP, DOWN }
 
@@ -38,16 +38,16 @@ class Coordinates {
         if (shift > 0) x = (x + shift) % (width - 1);
         if (shift < 0) {
             // If we move with width-shift, we will return to the same point
-            int real_shift = (-shift) % width;
-            x = x - real_shift + width;
+            int realShift = (-shift) % width;
+            x = x - realShift + width;
         }
     }
     public void moveY(int shift) {
         if (shift > 0) y = (y + shift) % (height - 1);
         if (shift < 0) {
             // If we move with height-shift, we will return to the same point
-            int real_shift = (-shift) % height;
-            y = y - real_shift + height;
+            int realShift = (-shift) % height;
+            y = y - realShift + height;
         }
     }
     public int getX() {
@@ -75,7 +75,7 @@ public class TurtleState {
     private PenState pen_state;
     private Coordinates coordinates;
 
-    TurtleState(int x_, int y_, int width_, int height_) {
+    public TurtleState(int x_, int y_, int width_, int height_) {
         coordinates = new Coordinates(x_, y_, width_, height_);
         pen_state = PenState.UP;
     }

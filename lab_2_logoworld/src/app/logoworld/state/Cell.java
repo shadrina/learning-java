@@ -1,4 +1,4 @@
-package app.logoworld;
+package app.logoworld.state;
 
 enum ColorState { COLORED, EMPTY }
 

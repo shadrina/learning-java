@@ -1,5 +1,7 @@
 package app.logoworld;
 
+import app.logoworld.state.PlayingField;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,12 +50,14 @@ class Teleport extends Command {
 }
 
 public class CommandFactory {
+    private static final String RSC_NAME = "config.csv";
     private static Map<String, String> config;
+    private static Map<String, Command> cache;
 
-    CommandFactory(String rsc) {
+    static {
         InputStream inputstream = null;
         try {
-            inputstream = CommandFactory.class.getResourceAsStream(rsc);
+            inputstream = CommandFactory.class.getResourceAsStream(RSC_NAME);
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -73,10 +77,15 @@ public class CommandFactory {
         }
     }
 
-    public static Command create(String string_command) {
+    public static Command create(String stringCommand) {
+        String commandClassName = config.get(stringCommand);
+        if (cache.containsKey(commandClassName)) {
+            return cache.get(commandClassName);
+        }
         Command command = null;
         try {
-            command = (Command)Class.forName("app.logoworld" + config.get(string_command)).getConstructor().newInstance();
+            command = (Command)Class.forName("app.logoworld" + commandClassName).getConstructor().newInstance();
+            cache.put(commandClassName, command);
         }
         catch (InstantiationException
                 | IllegalAccessException
