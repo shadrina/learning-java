@@ -1,5 +1,5 @@
 INIT, Init
 MOVE, Move
 DRAW, Draw
-WADR, Ward
+WARD, Ward
 TELEPORT, Teleport

@@ -1,10 +1,12 @@
-package app.logoworld.view;
+package app.logoworld.view.commandline;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class CommandLinePanel extends JPanel {
     private static final int PANEL_HEIGHT = 35;
@@ -31,12 +33,11 @@ public class CommandLinePanel extends JPanel {
         executeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fireCommandLineEvent(new CommandLineEvent(this, commandField.getText()));
+                fireCommandLineEvent(new CommandLineEvent(this, commandField.getText().toUpperCase()));
             }
         });
 
         setLayout(new GridBagLayout());
-
         GridBagConstraints gc = new GridBagConstraints();
 
         // First column

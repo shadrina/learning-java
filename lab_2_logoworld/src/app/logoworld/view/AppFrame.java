@@ -1,5 +1,13 @@
 package app.logoworld.view;
 
+import app.logoworld.view.commandline.CommandLineEvent;
+import app.logoworld.view.commandline.CommandLineListener;
+import app.logoworld.view.commandline.CommandLinePanel;
+import app.logoworld.view.field.FieldEvent;
+import app.logoworld.view.field.FieldListener;
+import app.logoworld.view.field.FieldPanel;
+import app.logoworld.view.info.InfoPanel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -19,8 +27,14 @@ public class AppFrame extends JFrame {
 
         commandLine.addCommandLineListener(new CommandLineListener() {
             public void commandLineEventOccurred(CommandLineEvent e) {
-                // field.executeCommand(e.getCommand());
+                field.reactOnCommand(e.getCommand(), e.getArgs());
                 info.rememberAction(e.getMessage());
+            }
+        });
+
+        field.addFieldListener(new FieldListener() {
+            public void fieldEventOccurred(FieldEvent e) {
+                info.refreshTurtleInfo(e.getTurtleState());
             }
         });
 
