@@ -1,7 +1,13 @@
 package app.logoworld.api;
 
+
+import app.logoworld.exception.InvalidArgumentException;
+import app.logoworld.exception.InvalidCommandException;
+import app.logoworld.exception.LogoWorldException;
+import app.logoworld.exception.NotInitializedException;
 import app.logoworld.view.field.FieldEvent;
 import app.logoworld.view.field.FieldPanel;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,9 +17,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.TreeMap;
 
-// Command == Product
 abstract class Command {
-    public abstract void execute(String[] args, FieldPanel context);
+    public abstract void execute(String[] args, FieldPanel context) throws LogoWorldException;
+    protected void checkIntArguments(@NotNull String commandName, String[] args) throws InvalidArgumentException {
+        try {
+            for (String arg : args) {
+                if (Integer.parseInt(arg) < 0) {
+                    throw new InvalidArgumentException(commandName);
+                }
+            }
+        } catch (NumberFormatException ex) {
+            throw new InvalidArgumentException(commandName);
+        }
+    }
 }
 
 class Init extends Command {
@@ -23,8 +39,12 @@ class Init extends Command {
     private static final int MAX_CELLS_ROWS = 11;
 
     public Init() {}
-    public void execute(String[] args, FieldPanel context) {
-        // TODO: if (args.length < 2) throw new Exception();
+    public void execute(String[] args, FieldPanel context) throws InvalidArgumentException {
+        if (args == null || args.length != 2 && args.length != 4) {
+            throw new InvalidArgumentException(Init.class.getSimpleName().toUpperCase());
+        }
+        checkIntArguments(Init.class.getSimpleName().toUpperCase(), args);
+
         if (context.getTurtle() != null) {
             context.clear();
             context.fireFieldEvent(new FieldEvent(context, context.getTurtle()));
@@ -50,13 +70,29 @@ class Init extends Command {
     }
 }
 class Move extends Command {
+    enum Direction { U, D, R, L }
+    private char validateDirection(String arg) throws InvalidArgumentException {
+        try {
+            Direction direction = Direction.valueOf(arg);
+            return direction.toString().charAt(0);
+        } catch (IllegalArgumentException ex) {
+            throw new InvalidArgumentException(Move.class.getSimpleName().toUpperCase());
+        }
+    }
+
     public Move() {}
-    public void execute(String[] args, FieldPanel context) {
-        // TODO if (args.length < 2) throw new Exception();
+    public void execute(String[] args, FieldPanel context) throws LogoWorldException {
+        if (context.getTurtle() == null) {
+            throw new NotInitializedException();
+        }
+        if (args == null || args.length != 2) {
+            throw new InvalidArgumentException(Move.class.getSimpleName().toUpperCase());
+        }
+        checkIntArguments(Move.class.getSimpleName().toUpperCase(), new String[] { args[1] });
+        validateDirection(args[0]);
+
         int length = Integer.parseInt(args[1]);
-        // TODO if (length < 0) throw new Exception();
-        char direction = args[0].toUpperCase().charAt(0);
-        // TODO if (direction == null) throw new Exception();
+        char direction = validateDirection(args[0]);
 
         for (int i = 0; i < length; i++) {
             context.moveTurtle(direction);
@@ -66,24 +102,43 @@ class Move extends Command {
 }
 class Draw extends Command {
     public Draw() {}
-    public void execute(String[] args, FieldPanel context) {
-        // TODO if (args.length > 0) throw Exception;
+    public void execute(String[] args, FieldPanel context) throws LogoWorldException {
+        if (context.getTurtle() == null) {
+            throw new NotInitializedException();
+        }
+        if (args != null) {
+            throw new InvalidArgumentException(Draw.class.getSimpleName().toUpperCase());
+        }
         context.getTurtle().putDownPen();
         context.fireFieldEvent(new FieldEvent(context, context.getTurtle()));
     }
 }
 class Ward extends Command {
     public Ward() {}
-    public void execute(String[] args, FieldPanel context) {
-        // TODO if (args.length > 0) throw Exception;
+    public void execute(String[] args, FieldPanel context) throws LogoWorldException {
+        if (context.getTurtle() == null) {
+            throw new NotInitializedException();
+        }
+        if (args != null) {
+            throw new InvalidArgumentException(Ward.class.getSimpleName().toUpperCase());
+        }
+
         context.getTurtle().putUpPen();
         context.fireFieldEvent(new FieldEvent(context, context.getTurtle()));
     }
 }
 class Teleport extends Command {
     public Teleport() {}
-    public void execute(String[] args, FieldPanel context) {
-        // TODO if (args.length < 2) throw Exception;
+    public void execute(String[] args, FieldPanel context) throws LogoWorldException {
+        if (context.getTurtle() == null) {
+            throw new NotInitializedException();
+        }
+        if (args == null || args.length != 2) {
+            throw new InvalidArgumentException(Teleport.class.getSimpleName().toUpperCase());
+        }
+
+        context.putTurtle(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+        context.fireFieldEvent(new FieldEvent(context, context.getTurtle()));
     }
 }
 
@@ -102,7 +157,6 @@ public class CommandFactory {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] args = line.split(",\\s+");
-                // TODO проверка корректности конфига
                 config.put(args[0], args[1]);
             }
         }
@@ -117,9 +171,11 @@ public class CommandFactory {
         }
     }
 
-    public static Command create(String stringCommand) {
-        // TODO: throw new IllegalCommandException();
+    public static Command create(String stringCommand) throws InvalidCommandException {
         String commandClassName = config.get(stringCommand);
+        if (commandClassName == null) {
+            throw new InvalidCommandException(stringCommand);
+        }
         if (cache.containsKey(commandClassName)) {
             return cache.get(commandClassName);
         }

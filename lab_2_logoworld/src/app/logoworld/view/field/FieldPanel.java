@@ -1,8 +1,12 @@
 package app.logoworld.view.field;
 
 import app.logoworld.api.CommandExecutor;
+import app.logoworld.exception.InvalidArgumentException;
+import app.logoworld.exception.InvalidCommandException;
+import app.logoworld.exception.LogoWorldException;
 import app.logoworld.view.field.state.CellPanel;
 import app.logoworld.view.field.state.TurtleState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,16 +18,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class FieldPanel extends JPanel {
-    private static final String RSC_PATH = "resources/";
-    private static final int FIELD_WIDTH = 350;
-    private static final int FIELD_HEIGHT = 465;
-    private static final int MAX_ARTIFACTS_NUMBER = 10;
-    private static final int BACKGROUND_XSHIFT = 8;
-    private static final int BACKGROUND_YSHIFT = 22;
+public class FieldPanel extends JPanel implements FieldCommons {
+
     private static BufferedImage background = null;
 
-    // private HelpPanel help = new HelpPanel();
     private TurtleState turtle = null;
     private ArrayList<CellPanel> cells = new ArrayList<>();
     private int cellsColumns;
@@ -42,12 +40,9 @@ public class FieldPanel extends JPanel {
     public FieldPanel() {
         setPreferredSize(new Dimension(FIELD_WIDTH, FIELD_HEIGHT));
         setBorder(BorderFactory.createTitledBorder("Playing Field"));
-        // setLayout(new BorderLayout());
-        // help.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        // add(help, BorderLayout.CENTER);
     }
 
-    public void reactOnCommand(String command, String[] args) {
+    public void reactOnCommand(String command, String[] args) throws LogoWorldException {
         CommandExecutor.executeCommand(command, args, this);
     }
 
@@ -77,15 +72,20 @@ public class FieldPanel extends JPanel {
         }
     }
 
+    private void checkArtifact(@NotNull CellPanel cell) {
+        if (cell.hasArtifact()) {
+            turtle.setColor(cell.getArtifactColor());
+            cell.removeArtifact();
+        }
+    }
+
     public void initCells(int columns, int rows) {
-        // remove(help);
         setLayout(new GridLayout(rows, columns));
         this.cellsColumns = columns;
         this.cellsRows = rows;
 
         for (int i = 0; i < columns * rows; i++) {
             CellPanel cell = new CellPanel();
-            // cell.setBorder(BorderFactory.createEtchedBorder());
             cell.setBorder(BorderFactory.createLineBorder(Color.WHITE));
             cell.setOpaque(false);
             cells.add(cell);
@@ -99,8 +99,15 @@ public class FieldPanel extends JPanel {
     public void putTurtle(int x, int y) {
         x %= cellsColumns;
         y %= cellsRows;
-        turtle = new TurtleState(x, y);
-        cells.get(y * cellsColumns + x).renderTurtle('U');
+        if (turtle == null) {
+            turtle = new TurtleState(x, y);
+        } else {
+            cells.get(turtle.getY() * cellsColumns + turtle.getX()).removeTurtle();
+            turtle.setXY(x, y);
+        }
+        CellPanel newCell = cells.get(y * cellsColumns + x);
+        checkArtifact(newCell);
+        newCell.renderTurtle(DEFAULT_DIRECTION);
 
         repaint();
     }
@@ -133,10 +140,7 @@ public class FieldPanel extends JPanel {
         }
 
         CellPanel newCell = cells.get(newY * cellsColumns + newX);
-        if (newCell.hasArtifact()) {
-            turtle.setColor(newCell.getArtifactColor());
-            newCell.removeArtifact();
-        }
+        checkArtifact(newCell);
         newCell.renderTurtle(direction);
         turtle.setXY(newX, newY);
 

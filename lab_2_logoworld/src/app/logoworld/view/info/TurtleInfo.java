@@ -5,20 +5,16 @@ import app.logoworld.view.field.state.TurtleState;
 import javax.swing.*;
 import java.awt.*;
 
-public class TurtleInfo extends JPanel {
-    private static final int PANEL_WIDTH = 120;
-    private static final int PANEL_HEIGHT = 90;
-    private static final String ARROW_UP = "↑";
-    private static final String ARROW_DOWN = "↓";
+public class TurtleInfo extends JPanel implements InfoCommons {
 
-    JLabel xCoordinate = new JLabel("-1");
-    JLabel yCoordinate = new JLabel("-1");
-    ColorIcon currentColor = new ColorIcon();
-    JLabel stepsMade = new JLabel("0");
-    JLabel penState = new JLabel(ARROW_UP);
+    private JLabel xCoordinate = new JLabel(NO_COORDINATE_LABEL);
+    private JLabel yCoordinate = new JLabel(NO_COORDINATE_LABEL);
+    private ColorIcon currentColor = new ColorIcon();
+    private JLabel stepsMade = new JLabel(NO_STEPS_LABEL);
+    private JLabel penState = new JLabel(ARROW_UP);
 
-    public TurtleInfo() {
-        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+    TurtleInfo() {
+        setPreferredSize(new Dimension(TURTLEINFO_PANEL_WIDTH, TURTLEINFO_PANEL_HEIGHT));
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
         setLayout(new GridBagLayout());
@@ -33,9 +29,9 @@ public class TurtleInfo extends JPanel {
         gc.gridy = 1;
         add(new JLabel("Y: "), gc);
         gc.gridy = 2;
-        add(new JLabel("Current color: "), gc);
-        gc.gridy = 3;
         add(new JLabel("Steps made: "), gc);
+        gc.gridy = 3;
+        add(new JLabel("Pen color: "), gc);
         gc.gridy = 4;
         add(new JLabel("Pen state: "), gc);
 
@@ -48,17 +44,17 @@ public class TurtleInfo extends JPanel {
         gc.gridy = 1;
         add(yCoordinate, gc);
         gc.gridy = 2;
-        add(currentColor, gc);
-        gc.gridy = 3;
         add(stepsMade, gc);
+        gc.gridy = 3;
+        add(currentColor, gc);
         gc.gridy = 4;
         add(penState, gc);
     }
 
     private void setInitData() {
-        xCoordinate.setText("-");
-        yCoordinate.setText("-");
-        stepsMade.setText("0");
+        xCoordinate.setText(NO_COORDINATE_LABEL);
+        yCoordinate.setText(NO_COORDINATE_LABEL);
+        stepsMade.setText(NO_STEPS_LABEL);
         penState.setText(ARROW_UP);
     }
 

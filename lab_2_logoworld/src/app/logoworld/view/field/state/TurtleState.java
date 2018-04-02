@@ -3,6 +3,7 @@ package app.logoworld.view.field.state;
 import java.awt.Color;
 
 public class TurtleState {
+
     private int x;
     private int y;
     private boolean penIsUp = true;

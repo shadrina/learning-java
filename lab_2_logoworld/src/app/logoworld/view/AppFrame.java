@@ -1,5 +1,8 @@
 package app.logoworld.view;
 
+import app.logoworld.exception.InvalidArgumentException;
+import app.logoworld.exception.InvalidCommandException;
+import app.logoworld.exception.NotInitializedException;
 import app.logoworld.view.commandline.CommandLineEvent;
 import app.logoworld.view.commandline.CommandLineListener;
 import app.logoworld.view.commandline.CommandLinePanel;
@@ -11,12 +14,13 @@ import app.logoworld.view.info.InfoPanel;
 import javax.swing.*;
 import java.awt.*;
 
-public class AppFrame extends JFrame {
+class AppFrame extends JFrame {
+
     private FieldPanel field;
     private InfoPanel info;
     private CommandLinePanel commandLine;
 
-    public AppFrame(String title) {
+    AppFrame(String title) {
         super(title);
 
         setLayout(new BorderLayout());
@@ -25,10 +29,21 @@ public class AppFrame extends JFrame {
         info = new InfoPanel();
         commandLine = new CommandLinePanel();
 
+        // TODO: ask
+        final AppFrame self = this;
         commandLine.addCommandLineListener(new CommandLineListener() {
             public void commandLineEventOccurred(CommandLineEvent e) {
-                field.reactOnCommand(e.getCommand(), e.getArgs());
-                info.rememberAction(e.getMessage());
+                try {
+                    field.reactOnCommand(e.getCommand(), e.getArgs());
+                    info.rememberAction(e.getMessage());
+                } catch (NotInitializedException ex) {
+                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+                } catch (InvalidCommandException | InvalidArgumentException ex) {
+                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), JOptionPane.WARNING_MESSAGE);
+                } catch (Exception ex) {
+                    System.out.println("Uncaught exception!\n");
+                    JOptionPane.showMessageDialog(self, ex.toString(), "Uncaught exception", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

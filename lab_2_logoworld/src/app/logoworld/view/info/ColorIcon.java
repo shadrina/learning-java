@@ -3,9 +3,8 @@ package app.logoworld.view.info;
 import javax.swing.*;
 import java.awt.*;
 
-public class ColorIcon extends JPanel {
-    private static final int COLORICON_WIDTH = 12;
-    private static final int COLORICON_HEIGHT = 12;
+public class ColorIcon extends JPanel implements InfoCommons {
+
     private Color color = null;
 
     ColorIcon() {

@@ -5,6 +5,7 @@ import app.logoworld.view.field.state.TurtleState;
 import java.util.EventObject;
 
 public class FieldEvent extends EventObject {
+
     private TurtleState ts;
 
     public FieldEvent(Object source, TurtleState ts) {

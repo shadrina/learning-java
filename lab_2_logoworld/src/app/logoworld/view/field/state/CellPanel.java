@@ -1,5 +1,7 @@
 package app.logoworld.view.field.state;
 
+import app.logoworld.view.field.FieldCommons;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -9,9 +11,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class CellPanel extends JPanel {
-    private static final String RSC_PATH = "resources/";
-    public static final int ARTIFACT_DIAMETER = 20;
+public class CellPanel extends JPanel implements FieldCommons {
 
     private static Map<Character, BufferedImage> turtleImages = new TreeMap<>();
     private static JLabel turtleLabel = null;

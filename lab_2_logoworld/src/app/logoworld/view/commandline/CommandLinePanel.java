@@ -8,11 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class CommandLinePanel extends JPanel {
-    private static final int PANEL_HEIGHT = 35;
-    private static final int TEXTAREA_COLUMNS_COUNT = 10;
-    private static final int EXECUTE_BUTTON_WIDTH = 85;
-    private static final int EXECUTE_BUTTON_HEIGHT = 20;
+public class CommandLinePanel extends JPanel implements CommandLineCommons {
 
     private EventListenerList listenerList = new EventListenerList();
 
