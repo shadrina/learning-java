@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -24,10 +24,17 @@ public class CellPanel extends JPanel implements FieldCommons {
     static {
         BufferedImage turtleImageU = null;
         try {
-            turtleImageU = ImageIO.read(new File(RSC_PATH + "turtle-u.png"));
-            BufferedImage turtleImageD = ImageIO.read(new File(RSC_PATH + "turtle-d.png"));
-            BufferedImage turtleImageR = ImageIO.read(new File(RSC_PATH + "turtle-r.png"));
-            BufferedImage turtleImageL = ImageIO.read(new File(RSC_PATH + "turtle-l.png"));
+            InputStream is = CellPanel.class.getResourceAsStream(RSC_PATH + "turtle-u.png");
+            turtleImageU = ImageIO.read(is);
+
+            is = CellPanel.class.getResourceAsStream(RSC_PATH + "turtle-d.png");
+            BufferedImage turtleImageD = ImageIO.read(is);
+
+            is = CellPanel.class.getResourceAsStream(RSC_PATH + "turtle-r.png");
+            BufferedImage turtleImageR = ImageIO.read(is);
+
+            is = CellPanel.class.getResourceAsStream(RSC_PATH + "turtle-l.png");
+            BufferedImage turtleImageL = ImageIO.read(is);
 
             turtleImages.put('U', turtleImageU);
             turtleImages.put('D', turtleImageD);

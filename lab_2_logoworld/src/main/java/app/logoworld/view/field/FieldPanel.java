@@ -1,20 +1,18 @@
 package app.logoworld.view.field;
 
+import app.logoworld.Main;
 import app.logoworld.api.CommandExecutor;
-import app.logoworld.exception.InvalidArgumentException;
-import app.logoworld.exception.InvalidCommandException;
 import app.logoworld.exception.LogoWorldException;
 import app.logoworld.view.field.state.CellPanel;
 import app.logoworld.view.field.state.TurtleState;
-import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -31,9 +29,10 @@ public class FieldPanel extends JPanel implements FieldCommons {
 
     static {
         try {
-            background = ImageIO.read(new File(RSC_PATH + "background.png"));
+            InputStream is = FieldPanel.class.getResourceAsStream(RSC_PATH + "background.png");
+            background = ImageIO.read(is);
         } catch(IOException ex) {
-            // ...
+            ex.printStackTrace();
         }
     }
 
@@ -72,7 +71,7 @@ public class FieldPanel extends JPanel implements FieldCommons {
         }
     }
 
-    private void checkArtifact(@NotNull CellPanel cell) {
+    private void checkArtifact(CellPanel cell) {
         if (cell.hasArtifact()) {
             turtle.setColor(cell.getArtifactColor());
             cell.removeArtifact();

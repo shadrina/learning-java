@@ -7,8 +7,6 @@ import app.logoworld.exception.LogoWorldException;
 import app.logoworld.exception.NotInitializedException;
 import app.logoworld.view.field.FieldEvent;
 import app.logoworld.view.field.FieldPanel;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +17,7 @@ import java.util.TreeMap;
 
 abstract class Command {
     public abstract void execute(String[] args, FieldPanel context) throws LogoWorldException;
-    protected void checkIntArguments(@NotNull String commandName, String[] args) throws InvalidArgumentException {
+    protected void checkIntArguments(String commandName, String[] args) throws InvalidArgumentException {
         try {
             for (String arg : args) {
                 if (Integer.parseInt(arg) < 0) {
@@ -69,6 +67,7 @@ class Init extends Command {
         context.fireFieldEvent(new FieldEvent(context, context.getTurtle()));
     }
 }
+
 class Move extends Command {
     enum Direction { U, D, R, L }
     private char validateDirection(String arg) throws InvalidArgumentException {
@@ -100,6 +99,7 @@ class Move extends Command {
         }
     }
 }
+
 class Draw extends Command {
     public Draw() {}
     public void execute(String[] args, FieldPanel context) throws LogoWorldException {
@@ -113,6 +113,7 @@ class Draw extends Command {
         context.fireFieldEvent(new FieldEvent(context, context.getTurtle()));
     }
 }
+
 class Ward extends Command {
     public Ward() {}
     public void execute(String[] args, FieldPanel context) throws LogoWorldException {
@@ -127,6 +128,7 @@ class Ward extends Command {
         context.fireFieldEvent(new FieldEvent(context, context.getTurtle()));
     }
 }
+
 class Teleport extends Command {
     public Teleport() {}
     public void execute(String[] args, FieldPanel context) throws LogoWorldException {
@@ -143,7 +145,7 @@ class Teleport extends Command {
 }
 
 public class CommandFactory {
-    private static final String RSC_NAME = "config.csv";
+    private static final String RSC_NAME = "/config.csv";
     private static final String PACKAGE_NAME = "app.logoworld.api.";
 
     private static Map<String, String> config = new TreeMap<>();

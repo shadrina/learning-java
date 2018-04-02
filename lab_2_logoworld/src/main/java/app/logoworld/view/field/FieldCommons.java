@@ -2,7 +2,7 @@ package app.logoworld.view.field;
 
 public interface FieldCommons {
 
-    String RSC_PATH = "resources/";
+    String RSC_PATH = "/pics/";
     int ARTIFACT_DIAMETER = 20;
 
     int FIELD_WIDTH = 350;
