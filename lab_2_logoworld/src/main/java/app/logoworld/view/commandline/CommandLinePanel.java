@@ -32,6 +32,28 @@ public class CommandLinePanel extends JPanel implements CommandLineCommons {
                 fireCommandLineEvent(new CommandLineEvent(this, commandField.getText().toUpperCase()));
             }
         });
+        executeButton.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    fireCommandLineEvent(new CommandLineEvent(this, "MOVE U 1"));
+                }
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    fireCommandLineEvent(new CommandLineEvent(this, "MOVE R 1"));
+                }
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    fireCommandLineEvent(new CommandLineEvent(this, "MOVE L 1"));
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    fireCommandLineEvent(new CommandLineEvent(this, "MOVE D 1"));
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+
         commandField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}

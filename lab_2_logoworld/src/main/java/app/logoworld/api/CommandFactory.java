@@ -132,6 +132,7 @@ class Ward extends Command {
 class Teleport extends Command {
     public Teleport() {}
     public void execute(String[] args, FieldPanel context) throws LogoWorldException {
+        checkIntArguments(Teleport.class.getSimpleName().toUpperCase(), args);
         if (context.getTurtle() == null) {
             throw new NotInitializedException();
         }

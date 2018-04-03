@@ -47,7 +47,7 @@ public class FieldPanel extends JPanel implements FieldCommons {
 
     public void clear() {
         turtle = null;
-        for (CellPanel cell: cells) {
+        for (CellPanel cell : cells) {
             remove(cell);
         }
         cells.clear();
