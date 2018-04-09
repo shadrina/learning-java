@@ -10,11 +10,14 @@ import app.logoworld.view.field.FieldEvent;
 import app.logoworld.view.field.FieldListener;
 import app.logoworld.view.field.FieldPanel;
 import app.logoworld.view.info.InfoPanel;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 
 class AppFrame extends JFrame {
+
+    private static final Logger log = Logger.getLogger(AppFrame.class);
 
     private FieldPanel field;
     private InfoPanel info;
@@ -37,11 +40,13 @@ class AppFrame extends JFrame {
                     field.reactOnCommand(e.getCommand(), e.getArgs());
                     info.rememberAction(e.getMessage());
                 } catch (NotInitializedException ex) {
+                    log.warn("User didn't initialize!", ex);
                     JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), JOptionPane.INFORMATION_MESSAGE);
                 } catch (InvalidCommandException | InvalidArgumentException ex) {
+                    log.warn("Invalid input!", ex);
                     JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), JOptionPane.WARNING_MESSAGE);
                 } catch (Exception ex) {
-                    System.out.println("Uncaught exception!\n");
+                    log.error("Uncaught exception!", ex);
                     JOptionPane.showMessageDialog(self, ex.toString(), "Uncaught exception", JOptionPane.ERROR_MESSAGE);
                 }
             }
