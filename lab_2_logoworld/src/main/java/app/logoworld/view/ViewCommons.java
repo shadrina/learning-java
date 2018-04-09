@@ -1,5 +1,6 @@
 package app.logoworld.view;
 
+
 public interface ViewCommons {
 
     int APP_FRAME_X = 40;

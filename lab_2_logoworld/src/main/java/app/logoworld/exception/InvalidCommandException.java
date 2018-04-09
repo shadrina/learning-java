@@ -1,5 +1,6 @@
 package app.logoworld.exception;
 
+
 public class InvalidCommandException extends LogoWorldException {
 
     // Source:

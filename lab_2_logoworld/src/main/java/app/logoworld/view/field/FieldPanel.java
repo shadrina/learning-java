@@ -1,6 +1,6 @@
 package app.logoworld.view.field;
 
-import app.logoworld.Main;
+
 import app.logoworld.api.CommandExecutor;
 import app.logoworld.exception.LogoWorldException;
 import app.logoworld.view.field.state.CellPanel;

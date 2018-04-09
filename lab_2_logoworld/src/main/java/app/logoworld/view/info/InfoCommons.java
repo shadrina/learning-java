@@ -1,5 +1,6 @@
 package app.logoworld.view.info;
 
+
 public interface InfoCommons {
 
     // TurtleInfo Commons

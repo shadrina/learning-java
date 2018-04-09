@@ -1,5 +1,6 @@
 package app.logoworld.view.field;
 
+
 public interface FieldCommons {
 
     String RSC_PATH = "/pics/";

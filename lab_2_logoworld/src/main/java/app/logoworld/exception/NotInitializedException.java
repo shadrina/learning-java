@@ -1,5 +1,6 @@
 package app.logoworld.exception;
 
+
 public class NotInitializedException extends LogoWorldException {
 
     public NotInitializedException() {

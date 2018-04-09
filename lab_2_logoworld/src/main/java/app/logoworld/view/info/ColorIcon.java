@@ -1,5 +1,6 @@
 package app.logoworld.view.info;
 
+
 import javax.swing.*;
 import java.awt.*;
 

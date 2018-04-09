@@ -1,5 +1,6 @@
 package app.logoworld.exception;
 
+
 public class InvalidArgumentException extends LogoWorldException {
 
     public InvalidArgumentException(String commandName) {

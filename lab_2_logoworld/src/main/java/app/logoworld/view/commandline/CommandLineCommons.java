@@ -1,5 +1,6 @@
 package app.logoworld.view.commandline;
 
+
 public interface CommandLineCommons {
 
     int PANEL_HEIGHT = 35;
