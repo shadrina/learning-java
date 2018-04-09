@@ -98,6 +98,9 @@ public class FieldPanel extends JPanel implements FieldCommons {
     public void putTurtle(int x, int y) {
         x %= cellsColumns;
         y %= cellsRows;
+        if (turtle != null && turtle.getX() == x && turtle.getY() == y) {
+            return;
+        }
         if (turtle == null) {
             turtle = new TurtleState(x, y);
         } else {

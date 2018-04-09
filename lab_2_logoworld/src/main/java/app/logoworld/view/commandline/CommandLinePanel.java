@@ -21,10 +21,7 @@ public class CommandLinePanel extends JPanel implements CommandLineCommons {
         final JTextField commandField = new JTextField(TEXTAREA_COLUMNS_COUNT);
         JButton executeButton = new JButton("Execute");
 
-        Dimension buttonSize = executeButton.getPreferredSize();
-        buttonSize.width = EXECUTE_BUTTON_WIDTH;
-        buttonSize.height = EXECUTE_BUTTON_HEIGHT;
-        executeButton.setPreferredSize(buttonSize);
+        executeButton.setPreferredSize(new Dimension(EXECUTE_BUTTON_WIDTH, EXECUTE_BUTTON_HEIGHT));
 
         executeButton.addActionListener(new ActionListener() {
             @Override
@@ -79,12 +76,10 @@ public class CommandLinePanel extends JPanel implements CommandLineCommons {
         // Second column
         gc.anchor = GridBagConstraints.LINE_START;
         gc.gridx = 1;
-        gc.gridy = 0;
         add(commandField, gc);
 
         // Third column
         gc.gridx = 2;
-        gc.gridy = 0;
         add(executeButton, gc);
     }
 
