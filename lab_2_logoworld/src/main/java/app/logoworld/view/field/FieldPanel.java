@@ -176,4 +176,13 @@ public class FieldPanel extends JPanel implements FieldCommons {
         super.paintComponent(g);
         g.drawImage(background, BACKGROUND_XSHIFT, BACKGROUND_YSHIFT, this);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj.getClass() == FieldPanel.class)) return false;
+        FieldPanel fieldPanelObj = (FieldPanel)obj;
+        return fieldPanelObj.turtle == this.turtle && fieldPanelObj.cells == this.cells;
+    }
 }

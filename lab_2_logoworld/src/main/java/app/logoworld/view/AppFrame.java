@@ -33,7 +33,6 @@ class AppFrame extends JFrame {
         info = new InfoPanel();
         commandLine = new CommandLinePanel();
 
-        // TODO: ask
         final AppFrame self = this;
         commandLine.addCommandLineListener(new CommandLineListener() {
             public void commandLineEventOccurred(CommandLineEvent e) {
