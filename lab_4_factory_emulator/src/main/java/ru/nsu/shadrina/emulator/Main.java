@@ -1,23 +1,29 @@
 package ru.nsu.shadrina.emulator;
 
-import ru.nsu.shadrina.emulator.factory.Storage;
-import ru.nsu.shadrina.emulator.factory.Customer;
-import ru.nsu.shadrina.emulator.factory.Supplier;
+import ru.nsu.shadrina.emulator.factory.controller.CompanyManager;
+import ru.nsu.shadrina.emulator.factory.model.FactoryModel;
+import ru.nsu.shadrina.emulator.factory.model.Worker;
+import ru.nsu.shadrina.emulator.factory.model.CarDetailStorage;
+import ru.nsu.shadrina.emulator.factory.model.suppliers.Supplier;
+import ru.nsu.shadrina.emulator.factory.view.FactoryView;
+import ru.nsu.shadrina.emulator.threadpool.MyThreadPool;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Storage storage = new Storage(5);
-        Thread customer = new Thread(new Customer(storage));
-        Thread supplier = new Thread(new Supplier(storage));
+        CompanyManager companyManager = new CompanyManager();
+        FactoryModel factoryModel = companyManager.getModel();
 
-        supplier.start();
-        customer.start();
+        List<Runnable> runnablz = new ArrayList<>();
+        runnablz.add(new Customer(companyManager));
+        runnablz.addAll(Arrays.asList(factoryModel.getEngineSuppliers()));
+        runnablz.addAll(Arrays.asList(factoryModel.getCarBodySuppliers()));
+        runnablz.addAll(Arrays.asList(factoryModel.getCarAccessoriesSuppliers()));
+        runnablz.addAll(Arrays.asList(factoryModel.getWorkers()));
 
-        try {
-            customer.join();
-            supplier.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        MyThreadPool.createThreadPool(runnablz);
     }
 }

@@ -1,23 +1,26 @@
-package ru.nsu.shadrina.emulator.factory;
+package ru.nsu.shadrina.emulator.factory.model;
 
-import ru.nsu.shadrina.emulator.factory.model.CarDetail;
+import ru.nsu.shadrina.emulator.factory.model.details.CarDetail;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Storage {
+public class CarDetailStorage<T extends CarDetail> {
     private boolean isEmpty = true;
     private boolean isFull = false;
     private int capacity;
-    private List<CarDetail> details = new ArrayList<CarDetail>();
+    private List<T> details = new ArrayList<T>();
 
-    public Storage(int capacity) {
+    public CarDetailStorage(int capacity) {
         this.capacity = capacity;
     }
 
-    synchronized public void addDetail(CarDetail detail) {
+    public synchronized void addDetail(T detail) {
         try {
-            while (isFull) wait();
+            while (isFull) {
+                System.out.println("Storage is full, need to wait");
+                wait();
+            }
             if (details.size() == capacity - 1) {
                 isFull = true;
                 notifyAll();
@@ -26,15 +29,14 @@ public class Storage {
                 isEmpty = false;
                 notifyAll();
             }
-            System.out.println("New detail is in the storage");
             details.add(detail);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    synchronized public CarDetail getDetail() {
-        CarDetail detail = null;
+    public synchronized T getDetail() {
+        T detail = null;
         try {
             while (isEmpty) wait();
             if (details.size() == 1) {
@@ -47,10 +49,13 @@ public class Storage {
             }
             detail = details.get(0);
             details.remove(detail);
-            System.out.println("Gave 1 detail to the customer");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return detail;
+    }
+
+    public synchronized int getDetailsCount() {
+        return details.size();
     }
 }
