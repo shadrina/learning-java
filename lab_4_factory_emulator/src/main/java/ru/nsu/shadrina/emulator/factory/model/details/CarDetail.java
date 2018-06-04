@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public abstract class CarDetail {
-    private static final String RSC_PATH = "/images/";
-
     private String name;
 
     CarDetail() {

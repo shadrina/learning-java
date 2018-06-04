@@ -3,6 +3,8 @@ package ru.nsu.shadrina.emulator.factory.model;
 import ru.nsu.shadrina.emulator.factory.model.details.CarAccessories;
 import ru.nsu.shadrina.emulator.factory.model.details.CarBody;
 import ru.nsu.shadrina.emulator.factory.model.details.Engine;
+import ru.nsu.shadrina.emulator.factory.model.storage.CarDetailStorage;
+import ru.nsu.shadrina.emulator.factory.model.storage.CarStorage;
 import ru.nsu.shadrina.emulator.factory.model.suppliers.CarAccessoriesSupplier;
 import ru.nsu.shadrina.emulator.factory.model.suppliers.CarBodySupplier;
 import ru.nsu.shadrina.emulator.factory.model.suppliers.EngineSupplier;
@@ -11,11 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
 
 public class FactoryModel {
     private static final String CFG_NAME = "/settings.cfg";
@@ -42,8 +40,6 @@ public class FactoryModel {
         }
     }
 
-    private final Collection<IModelSubscriber> subscribers = new CopyOnWriteArrayList<>();
-
     private CarDetailStorage<Engine> engineStorage = new CarDetailStorage<>(settings.get("EngineStorageSize"));
     private CarDetailStorage<CarBody> carBodyStorage = new CarDetailStorage<>(settings.get("CarBodyStorageSize"));
     private CarDetailStorage<CarAccessories> carAccessoriesStorage = new CarDetailStorage<>(settings.get("CarAccessoriesStorageSize"));
@@ -54,6 +50,8 @@ public class FactoryModel {
     private CarAccessoriesSupplier[] carAccessoriesSuppliers = new CarAccessoriesSupplier[settings.get("CarAccessoriesSuppliersCount")];
 
     private Worker[] workers = new Worker[settings.get("WorkersCount")];
+
+    private List<Customer> customers = new LinkedList<>();
 
     {
         for (int i = 0; i < engineSuppliers.length; i++) {
@@ -102,36 +100,20 @@ public class FactoryModel {
         return carAccessoriesSuppliers;
     }
 
+    public List<Runnable> getSuppliers() {
+        List<Runnable> suppliers = new ArrayList<>();
+        suppliers.addAll(Arrays.asList(engineSuppliers));
+        suppliers.addAll(Arrays.asList(carBodySuppliers));
+        suppliers.addAll(Arrays.asList(carAccessoriesSuppliers));
+
+        return  suppliers;
+    }
+
     public Worker[] getWorkers() {
         return workers;
     }
 
-    /* TODO: ugly hack or not o_O */
-    public void registerChanges() {
-        notifySubscribers();
-    }
-
-    protected void notifySubscribers() {
-        for (final IModelSubscriber subscriber : subscribers) {
-            notifySubscriber(subscriber);
-        }
-    }
-
-    private void notifySubscriber(IModelSubscriber subscriber) {
-        assert subscriber != null;
-        subscriber.modelChanged(this);
-    }
-
-    public void subscribe(IModelSubscriber subscriber) {
-        if (subscriber == null) throw new NullPointerException("No parameter");
-        if (subscribers.contains(subscriber)) throw new IllegalArgumentException("Resubmit: " + subscriber);
-        subscribers.add(subscriber);
-        notifySubscriber(subscriber);
-    }
-
-    public void unsubscribe(IModelSubscriber subscriber) {
-        if (subscriber == null) throw new NullPointerException("No parameter");
-        if (!subscribers.contains(subscriber)) throw new IllegalArgumentException("Unknown subscriber: " + subscriber);
-        subscribers.remove(subscriber);
+    public List<Customer> getCustomers() {
+        return customers;
     }
 }

@@ -1,11 +1,14 @@
-package ru.nsu.shadrina.emulator.factory.model;
+package ru.nsu.shadrina.emulator.factory.model.storage;
 
 import ru.nsu.shadrina.emulator.factory.model.details.CarDetail;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class CarDetailStorage<T extends CarDetail> {
+    private static final int EXPORT_REGISTRATION_TIME = 1;
+
     private boolean isEmpty = true;
     private boolean isFull = false;
     private int capacity;
@@ -35,6 +38,10 @@ public class CarDetailStorage<T extends CarDetail> {
         }
     }
 
+    private void registerExport() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(EXPORT_REGISTRATION_TIME);
+    }
+
     public synchronized T getDetail() {
         T detail = null;
         try {
@@ -48,6 +55,7 @@ public class CarDetailStorage<T extends CarDetail> {
                 notifyAll();
             }
             detail = details.get(0);
+            registerExport();
             details.remove(detail);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -57,5 +65,9 @@ public class CarDetailStorage<T extends CarDetail> {
 
     public synchronized int getDetailsCount() {
         return details.size();
+    }
+
+    public int getCapacity() {
+        return capacity;
     }
 }

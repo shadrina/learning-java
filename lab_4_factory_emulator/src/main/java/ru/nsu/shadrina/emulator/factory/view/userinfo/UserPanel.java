@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class UserPanel extends JPanel {
     {
-        setPreferredSize(new Dimension(700, 200));
+        setPreferredSize(new Dimension(500, 200));
         setLayout(new GridLayout());
         add(new SettingsPanel());
         add(new SettingsPanel());

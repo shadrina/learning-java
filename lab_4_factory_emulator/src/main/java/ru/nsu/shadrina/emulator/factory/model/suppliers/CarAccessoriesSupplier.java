@@ -1,6 +1,6 @@
 package ru.nsu.shadrina.emulator.factory.model.suppliers;
 
-import ru.nsu.shadrina.emulator.factory.model.CarDetailStorage;
+import ru.nsu.shadrina.emulator.factory.model.storage.CarDetailStorage;
 import ru.nsu.shadrina.emulator.factory.model.details.CarAccessories;
 
 import java.util.concurrent.TimeUnit;
@@ -16,7 +16,7 @@ public class CarAccessoriesSupplier extends Supplier {
     @Override
     public void run() {
         try {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 130; i++) {
                 storage.addDetail(new CarAccessories());
                 System.out.println("CarAccessoriesSupplier created new accessories");
                 TimeUnit.SECONDS.sleep(speed);

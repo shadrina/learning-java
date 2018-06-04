@@ -5,8 +5,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MyThreadPool {
+    private static final int N_THREADS = 10;
+
     public static void createThreadPool(List<Runnable> runnablz) {
-        ExecutorService executor = Executors.newFixedThreadPool(5);
+        ExecutorService executor = Executors.newFixedThreadPool(N_THREADS);
         for (Runnable runnable: runnablz) {
             executor.execute(runnable);
         }

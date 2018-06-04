@@ -1,7 +1,7 @@
 package ru.nsu.shadrina.emulator.factory.model.suppliers;
 
 public abstract class Supplier implements Runnable {
-    private static final int DEFAULT_SPEED = 5;
+    private static final int DEFAULT_SPEED = 2;
 
     protected int speed = DEFAULT_SPEED;
 
